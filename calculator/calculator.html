@@ -1,0 +1,183 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Enhanced Calculator</title> 
+    <style> 
+        body { 
+            font-family: Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            background-color: #282c34; 
+        } 
+        .calculator { 
+            background-color: #f9f9f9; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+            padding: 20px; 
+            width: 320px; 
+        } 
+        #display { 
+            width: 94%; 
+            height: 50px; 
+            font-size: 1.5em; 
+            text-align: right; 
+            margin-bottom: 15px; 
+            padding: 10px; 
+            border: none; 
+            border-radius: 5px; 
+            background-color: #f3f3f3; 
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); 
+        } 
+        .buttons { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px; 
+        } 
+        button { 
+            padding: 15px; 
+            font-size: 1.2em; 
+            border: none; 
+            background-color: #d3d3d3; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            transition: background-color 0.2s ease; 
+        } 
+        button:hover { 
+            background-color: #bcbcbc; 
+        } 
+        .operator { 
+            background-color: #ff9f43; 
+            color: white; 
+        } 
+        .operator:hover { 
+            background-color: #e08b2f; 
+        } 
+        .special { 
+            background-color: #34ace0; 
+            color: white; 
+        } 
+        .special:hover { 
+            background-color: #279fc9; 
+        } 
+        /* Ensuring equal button sizes */ 
+        button { 
+            width: 100%; 
+            height: 50px; 
+        } 
+    </style> 
+</head> 
+<body> 
+    <div class="calculator"> 
+        <input type="text" id="display" readonly> 
+        <div class="buttons"> 
+            <button class="special" onclick="clearDisplay()">C</button> 
+            <button onclick="squareRoot()">√</button> 
+            <button onclick="square()">x²</button> 
+            <button class="operator" onclick="setOperation('/')">÷</button> 
+            <button onclick="appendToDisplay('7')">7</button> 
+            <button onclick="appendToDisplay('8')">8</button> 
+            <button onclick="appendToDisplay('9')">9</button> 
+            <button class="operator" onclick="setOperation('*')">×</button> 
+            <button onclick="appendToDisplay('4')">4</button> 
+            <button onclick="appendToDisplay('5')">5</button> 
+            <button onclick="appendToDisplay('6')">6</button> 
+            <button class="operator" onclick="setOperation('-')">−</button> 
+            <button onclick="appendToDisplay('1')">1</button> 
+            <button onclick="appendToDisplay('2')">2</button> 
+            <button onclick="appendToDisplay('3')">3</button> 
+            <button class="operator" onclick="setOperation('+')">+</button> 
+            <button onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button> 
+            <button onclick="appendToDisplay('.')">.</button> 
+            <button class="special" onclick="calculate()">=</button> 
+            <button class="operator" onclick="setOperation('^')">x<sup>y</sup></button> 
+            <!-- Modulus button --> 
+            <button class="operator" onclick="setOperation('%')">%</button> 
+        </div> 
+    </div> 
+ 
+    <script> 
+        let display = document.getElementById('display'); 
+        let currentValue = ''; 
+        let operation = ''; 
+        let previousValue = ''; 
+ 
+        function appendToDisplay(value) { 
+            currentValue += value; 
+            display.value = currentValue; 
+        } 
+ 
+        function clearDisplay() { 
+            currentValue = ''; 
+            operation = ''; 
+            previousValue = ''; 
+            display.value = ''; 
+        } 
+ 
+        function setOperation(op) { 
+            if (currentValue !== '') { 
+                if (previousValue !== '') { 
+                    calculate(); 
+                } 
+                operation = op; 
+                previousValue = currentValue; 
+                currentValue = ''; 
+            } 
+        } 
+ 
+        function calculate() { 
+            if (previousValue !== '' && currentValue !== '') { 
+                let result; 
+                const prev = parseFloat(previousValue); 
+                const current = parseFloat(currentValue); 
+                switch (operation) { 
+                    case '+': 
+                        result = prev + current; 
+                        break; 
+                    case '-': 
+                        result = prev - current; 
+                        break; 
+                    case '*': 
+                        result = prev * current; 
+                        break; 
+                    case '/': 
+                        // Quotient: Integer division (floor) 
+                        result = Math.floor(prev / current); 
+                        break; 
+                    case '%': 
+                        // Modulus: Remainder of division 
+                        result = prev % current; 
+                        break; 
+                    case '^': 
+                        result = Math.pow(prev, current); 
+                        break; 
+                } 
+                display.value = result; 
+                previousValue = result.toString(); 
+                currentValue = ''; 
+                operation = ''; 
+            } 
+        } 
+ 
+        function squareRoot() { 
+            if (currentValue !== '') { 
+                const result = Math.sqrt(parseFloat(currentValue)); 
+                display.value = result; 
+                currentValue = result.toString(); 
+            } 
+        } 
+ 
+        function square() { 
+            if (currentValue !== '') { 
+                const result = Math.pow(parseFloat(currentValue), 2); 
+                display.value = result; 
+                currentValue = result.toString(); 
+            } 
+        } 
+    </script> 
+</body> 
+</html>
